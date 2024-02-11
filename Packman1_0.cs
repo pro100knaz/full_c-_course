@@ -31,7 +31,7 @@ namespace full_c__course
 
         ConsoleColor _color;
 
-        public ConsoleColor Color {get => Color; set => _color = value; }
+        public ConsoleColor Color {get => _color; set => _color = value; }
 
         public Ghost(int x, int y, ConsoleColor c) : base( x,  y)
         {
@@ -53,7 +53,7 @@ namespace full_c__course
             //какая-то логика полонй остановки
         }
 
-        static void GhostDFS(Player player,ref Ghost ghost, ref List<List<char>> map)
+        static void GhostDFS(Player player, Ghost ghost, ref List<List<char>> map)
         {
             if (player.xPosition == ghost.xPosition && player.yPosition == ghost.yPosition)
             {
@@ -71,11 +71,11 @@ namespace full_c__course
 
                 if (map[ty][tx] != '#')
                 {
-                    map[ghost.xPosition][ghost.yPosition] = ' ';
+                    map[ghost.yPosition][ghost.xPosition] = ' ';
                     ghost.xPosition = tx;
                     ghost.yPosition = ty;
-                    map[ghost.xPosition][ghost.yPosition] = '@';
-                    GhostDFS(player,ref ghost,ref map);
+                    map[ghost.yPosition][ghost.xPosition] = '@';
+                    GhostDFS(player, ghost,ref map);
                 }
                     
             }
@@ -236,14 +236,31 @@ namespace full_c__course
                         }
             });
 
+            
 
 
-            Ghost ghost1 = new Ghost(8, 6, ConsoleColor.Red);
+
+            Ghost ghost1 = new Ghost(8, 6, ConsoleColor.White);
             Ghost ghost2 = new Ghost(5, 3, ConsoleColor.Green);
+
+
+            changePlayerPosition(ghost1, ref map, '@');
+            changePlayerPosition(ghost2, ref map, '@');
 
             List<Ghost> ghosts = new List<Ghost>();
             ghosts.Add(ghost1);
             ghosts.Add(ghost2);
+
+            //Task.Run(() =>
+            //{
+            //    while (true)
+            //    {
+            //        foreach(var g in ghosts)
+            //        {
+            //            GhostDFS(player, g, ref map);
+            //        }
+            //    }
+            //});
 
 
 
