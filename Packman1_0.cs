@@ -26,7 +26,7 @@ namespace full_c__course
     }
 
 
-    internal class Program
+    internal class Packman1_0
     {
 
         static void printnmap(List<string> map, int score)
@@ -141,22 +141,24 @@ namespace full_c__course
 
         static void Main(string[] args)
         {
-            string[] s = File.ReadAllLines("map.txt");
+            string[] mapFromFile = File.ReadAllLines("map.txt");
             List<string> map = new List<string>();
-            for (int i = 0; i < s.Length; i++)
+
+            for (int i = 0; i < mapFromFile.Length; i++)
             {
-                map.Add(s[i]);
+                map.Add(mapFromFile[i]);
             }
+
+            Console.CursorVisible = false;
 
             Player player = new Player(1, 1);
             changePlayerPosition(player, map, 'a');
+
+
             int score = 0;
             while (true)
             {                     
-
-
-
-                    Thread.Sleep(10);
+                Thread.Sleep(10);
                 Console.Clear();
                 printnmap(map, score);
                 ConsoleKeyInfo pressedKey = Console.ReadKey();    
