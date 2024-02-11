@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace full_c__course
 {
@@ -18,22 +19,35 @@ namespace full_c__course
             _xPosition = x;
             _yPosition = y;
         }
-        public Player()
+        public Player() 
         {
-            
+
         }
 
     }
+    class Ghost: Player
+    {
+
+        ConsoleColor _color;
+
+        public Ghost(int x, int y, ConsoleColor c) : base( x,  y)
+        {
+            _color = c;
+        }
+    }
+
+    
+
 
 
     internal class Packman1_0
     {
 
-        static void printnmap(List<string> map, int score)
+        static void printnmap(List<List<char>> map, int score)
         {
             for (int i = 0; i < map.Count; i++)
             {
-                for(int j = 0; j < map[i].Length; j++)
+                for(int j = 0; j < map[i].Count; j++)
                 {
                     if (map[i][j] == '#')
                     {
@@ -69,15 +83,12 @@ namespace full_c__course
         }
 
 
-        static void changePlayerPosition(Player player, List<string> map, char simvol)
+        static void changePlayerPosition(Player player, List<List<char>> map, char simvol)
         {
-
-            StringBuilder row = new StringBuilder(map[player.yPosition]);
-            row[player.xPosition] = simvol;
-            map[player.yPosition] = row.ToString();
+            map[player.yPosition][player.xPosition] = simvol;
         }
 
-        static void changePlayerDirection(Player player, ConsoleKeyInfo pressedKey, List<string> map,ref int score)
+        static void changePlayerDirection(Player player, ConsoleKeyInfo pressedKey, List<List<char>> map, ref int score)
         {
             switch (pressedKey.Key)
             {
@@ -130,7 +141,7 @@ namespace full_c__course
             }
         }
 
-        static bool hasDot(Player  player, List<string> map)
+        static bool hasDot(Player  player, List<List<char>> map)
         {
             if (map[player.yPosition][player.xPosition] == '.')
             {
@@ -142,26 +153,48 @@ namespace full_c__course
         static void Main(string[] args)
         {
             string[] mapFromFile = File.ReadAllLines("map.txt");
-            List<string> map = new List<string>();
 
+
+            List<List<char>> map = new List<List<char>>(mapFromFile.Length);
             for (int i = 0; i < mapFromFile.Length; i++)
             {
-                map.Add(mapFromFile[i]);
+                map.Add(new List<char>());
+                for (int j = 0; j < mapFromFile[0].Length; j++)
+                {
+                    map[i].Add(mapFromFile[i][j]);
+                }
             }
+
 
             Console.CursorVisible = false;
 
             Player player = new Player(1, 1);
             changePlayerPosition(player, map, 'a');
+            ConsoleKeyInfo pressedKey = new ConsoleKeyInfo();
+
+
+            Task.Run(() => 
+            {
+                        while(true)
+                        {
+                             pressedKey = Console.ReadKey();
+                        }
+            });
+
+
+
+            Ghost ghost1 = new Ghost(1, 1, ConsoleColor.Red);
+            Ghost ghost2 = new Ghost(1, 1, ConsoleColor.Green);
 
 
             int score = 0;
             while (true)
             {                     
-                Thread.Sleep(10);
+                Thread.Sleep(150);
                 Console.Clear();
                 printnmap(map, score);
-                ConsoleKeyInfo pressedKey = Console.ReadKey();    
+
+
                changePlayerDirection(player, pressedKey, map,ref score);
 
             }
