@@ -12,17 +12,25 @@ namespace full_c__course
         private int _xPosition;
         private int _yPosition;
 
+
+        public int PreviuosXposition { get; set; }
+        public int PreviuosYposition { get; set; }
+        public char PreviousState { get; set; } = ' ';
+
         public int xPosition { get => _xPosition; set => _xPosition = value; }
         public int yPosition { get => _yPosition; set => _yPosition = value; }
 
         public Player(int x, int y)
         {
-            _xPosition = x;
+            PreviuosXposition = x;
+            PreviuosYposition = y;
+
+        _xPosition = x;
             _yPosition = y;
         }
         public Player()
         {
-
+            
         }
 
     }

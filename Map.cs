@@ -15,7 +15,12 @@ namespace full_c__course
 
         public List<List<char>> map { get; set; }
 
+        public int MapWidth { get; set; }
+        public int MapHeight { get; set; }
         public Map() {}
+
+
+        public bool Looser { get; set; } = false;
         public Map(string fileSource)
         {
             
@@ -27,6 +32,8 @@ namespace full_c__course
         {
             string[] mapFromFile = File.ReadAllLines(FileSource);
             map = new List<List<char>>(mapFromFile.Length);
+            MapHeight = mapFromFile.Length;
+            MapWidth = mapFromFile[0].Length;
             for (int i = 0; i < mapFromFile.Length; i++)
             {
                 map.Add(new List<char>());
@@ -51,8 +58,27 @@ namespace full_c__course
         }
 
 
+        void CheckForLoose()
+        {
+            foreach (var g in Ghosts)
+            {
+                if(g.yPosition == player.yPosition &&
+                    g.xPosition == player.xPosition)
+                {
+                    Looser = true; 
+                    break;
+                }
+            }
+        }
+
+
         public void printnmap()
         {
+            SetGhostPosition();
+            SetPlayerPosition();
+            CheckForLoose();
+            if (Looser)
+                return;
             for (int i = 0; i < map.Count; i++)
             {
                 for (int j = 0; j < map[i].Count; j++)
@@ -81,6 +107,7 @@ namespace full_c__course
                     {
                         //значит тут призрак и хотелось бы цвет призрака
                         //можно проверить какому призраку соответсвует и нарисовать его цвет
+                        //ВЫПОЛНЕНО !!!
                         foreach (var g in Ghosts)
                         {
                             if (g.yPosition == i && g.xPosition == j)
@@ -110,59 +137,64 @@ namespace full_c__course
             }
             return false;
         }
-        private void changePlayerPosition(char simvol)
-        {
-            map[player.yPosition][player.xPosition] = simvol;
-        }
         public void changePlayerDirection(ConsoleKeyInfo pressedKey)
         {
+            //Тут происходит переходит игрока в зависимости от ситуации )))
             switch (pressedKey.Key)
             {
                 case ConsoleKey.UpArrow:
 
                     if (map[player.yPosition - 1][player.xPosition] != '#')
                     {
-                        changePlayerPosition(' ');
+                        player.PreviuosXposition = player.xPosition;
+                        player.PreviuosYposition = player.yPosition;
                         player.yPosition--;
                         if (hasDot())
                             score++;
-                        changePlayerPosition('a');
+                        map[player.PreviuosYposition][player.PreviuosXposition] = player.PreviousState;
+                       
                     }
                     break;
                 case ConsoleKey.DownArrow:
                     if (map[player.yPosition + 1][player.xPosition] != '#')
                     {
-                        changePlayerPosition(' ');
+                        player.PreviuosXposition = player.xPosition;
+                        player.PreviuosYposition = player.yPosition;
                         player.yPosition++;
                         if (hasDot())
                             score++;
-
-                        changePlayerPosition('a');
+                        map[player.PreviuosYposition][player.PreviuosXposition] = player.PreviousState;
+                        
                     }
                     break;
                 case ConsoleKey.LeftArrow:
                     if (map[player.yPosition][player.xPosition - 1] != '#')
                     {
-                        changePlayerPosition(' ');
+                        player.PreviuosXposition = player.xPosition;
+                        player.PreviuosYposition = player.yPosition;
                         player.xPosition--;
                         if (hasDot())
                             score++;
-
-                        changePlayerPosition('a');
+                        map[player.PreviuosYposition][player.PreviuosXposition] = player.PreviousState;
+                       
                     }
                     break;
                 case ConsoleKey.RightArrow:
                     if (map[player.yPosition][player.xPosition + 1] != '#')
                     {
 
-                        changePlayerPosition(' ');
+                        player.PreviuosXposition = player.xPosition;
+                        player.PreviuosYposition = player.yPosition;
                         player.xPosition++;
                         if (hasDot())
                             score++;
-                        changePlayerPosition('a');
+                        map[player.PreviuosYposition][player.PreviuosXposition] = player.PreviousState;
+                        
                     }
                     break;
-
+                default:
+                        //Нужно реализовать логику чтобы пакман продолжал двигаться до стенки даже если нажата не та клавиша
+                    break;
             }
         }
     }
