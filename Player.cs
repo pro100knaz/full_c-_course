@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace full_c__course
+namespace Game_PackMan
 {
     public class Player
     {
@@ -25,7 +25,7 @@ namespace full_c__course
             PreviuosXposition = x;
             PreviuosYposition = y;
 
-        _xPosition = x;
+            _xPosition = x;
             _yPosition = y;
         }
         public Player()
