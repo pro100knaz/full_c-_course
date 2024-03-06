@@ -5,12 +5,13 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace full_c__course
+namespace Game_PackMan
+
 {
     public static class FindShortestWayForGhost
     {
         private const int INF = 1000000;
-        public static (int, int) BFS(Map map, Ghost curGhost)
+        public static (int, int) BFS(Map map, Ghost curGhost) //типичный алгоритм, разве что название переменых поменять
         {
             int finishX = map.player.xPosition;
             int finishY = map.player.yPosition;
@@ -42,7 +43,7 @@ namespace full_c__course
             {
                 (int y, int x) Coordinates = q.Dequeue();
 
-                bool flag = false;
+                bool flag = false; //Нужен для того чтобы не осматривать весь лабиринт
 
                 for (int i = 0; i < dy.Count; i++)
                 {
@@ -66,22 +67,6 @@ namespace full_c__course
                 if (flag)
                     break;
             }
-
-
-
-            //for (int i = 0;i < dist.Count;i++)
-            //{
-            //    for (int j = 0; j < dist[0].Count; j++)
-            //    {
-            //        Console.Write(dist[i][j]);
-            //    }
-
-            //    Console.WriteLine();
-
-            //}
-
-
-
 
             var result = getPath(curGhost.xPosition,curGhost.yPosition,finishX,finishY,dist);
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace full_c__course
+namespace Game_PackMan
 {
     public class Map
     {
@@ -23,13 +23,15 @@ namespace full_c__course
         public bool Looser { get; set; } = false;
         public Map(string fileSource)
         {
-            
+            //считывание карты с файла
             FileSource = fileSource;
+            // вот тут скорее всего так лучше не делать, лучше из главной программы вызывать ReadMap и в случае отсутсвия файловой переменной кидать ошибку
             ReadMap();
         }
 
        public void ReadMap()
         {
+            //понятно
             string[] mapFromFile = File.ReadAllLines(FileSource);
             map = new List<List<char>>(mapFromFile.Length);
             MapHeight = mapFromFile.Length;
@@ -79,6 +81,11 @@ namespace full_c__course
             CheckForLoose();
             if (Looser)
                 return;
+
+
+            //Возможно стоит переделать, поместив все возможные символы в Enum, чтобы можно было быстро менять различные символы 
+            //так же это умеьшит хар кода и добавит инкапсуляции
+            //но пока и так нормально )
             for (int i = 0; i < map.Count; i++)
             {
                 for (int j = 0; j < map[i].Count; j++)
@@ -112,8 +119,6 @@ namespace full_c__course
                         {
                             if (g.yPosition == i && g.xPosition == j)
                                 Console.ForegroundColor = g.Color;
-
-
                         }
                         Console.Write(map[i][j]);
                         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -131,6 +136,7 @@ namespace full_c__course
         }
         private bool hasDot()
         {
+            //чтобы собирать поинты игроком
             if (map[player.yPosition][player.xPosition] == '.')
             {
                 return true;
@@ -139,16 +145,16 @@ namespace full_c__course
         }
         public void changePlayerDirection(ConsoleKeyInfo pressedKey)
         {
-            //Тут происходит переходит игрока в зависимости от ситуации )))
+            //Тут происходит переходит игрока в зависимости от нажатой клавиши )))
             switch (pressedKey.Key)
             {
                 case ConsoleKey.UpArrow:
 
                     if (map[player.yPosition - 1][player.xPosition] != '#')
                     {
-                        player.PreviuosXposition = player.xPosition;
+                        player.PreviuosXposition = player.xPosition;  
                         player.PreviuosYposition = player.yPosition;
-                        player.yPosition--;
+                        player.yPosition--; // много хард кода одинакового, но из за этой строчки выносить на отдельные методы не особо рационально, наверное)
                         if (hasDot())
                             score++;
                         map[player.PreviuosYposition][player.PreviuosXposition] = player.PreviousState;

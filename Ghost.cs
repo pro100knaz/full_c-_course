@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace full_c__course
+namespace Game_PackMan
 {
     public class Ghost : Player
     {
